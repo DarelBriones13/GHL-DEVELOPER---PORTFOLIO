@@ -6,7 +6,7 @@ export const personalInfo = {
   location: 'Gingoog City, Misamis Oriental, Philippines',
   phone: '09947558334',
   email: 'darelbriones13@gmail.com',
-  website: 'https://darelbriones.dev',
+  website: 'https://ghl-developer-portfolio.vercel.app/',
   tagline: 'Building smart systems, automating business processes, and providing reliable technical support through GoHighLevel, web development, and virtual assistance.',
   social: {
     github:   'https://github.com/DarelBriones13',
