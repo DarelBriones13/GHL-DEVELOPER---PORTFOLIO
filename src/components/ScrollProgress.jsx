@@ -1,0 +1,28 @@
+import { useEffect, useState } from 'react';
+import { motion, useSpring } from 'framer-motion';
+import './ScrollProgress.css';
+
+const ScrollProgress = () => {
+  const [progress, setProgress] = useState(0);
+  const scaleX = useSpring(progress, { stiffness: 200, damping: 30 });
+
+  useEffect(() => {
+    const onScroll = () => {
+      const el   = document.documentElement;
+      const scrolled = el.scrollTop || document.body.scrollTop;
+      const total    = el.scrollHeight - el.clientHeight;
+      setProgress(total > 0 ? scrolled / total : 0);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <motion.div
+      className="scroll-progress"
+      style={{ scaleX, transformOrigin: '0%' }}
+    />
+  );
+};
+
+export default ScrollProgress;

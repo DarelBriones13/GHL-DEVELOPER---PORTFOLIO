@@ -1,0 +1,382 @@
+/* ── Google Fonts fallback (loads before custom fonts) ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ============================================================
+   CUSTOM FONTS
+   Neofolia  → ALL headings (h1–h6 + any heading-class)
+   SK Modernist → ALL body text, paragraphs, buttons, labels, nav
+============================================================ */
+@font-face {
+  font-family: var(--font-heading);
+  src: url('/fonts/neofolia-font/neofolia.woff') format('woff'),
+       url('/fonts/neofolia-font/neofolia.ttf')  format('truetype'),
+       url('/fonts/neofolia-font/neofolia.otf')  format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SK Modernist';
+  src: url('/fonts/sk-modernist/Sk-Modernist-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SK Modernist';
+  src: url('/fonts/sk-modernist/Sk-Modernist-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SK Modernist';
+  src: url('/fonts/sk-modernist/Sk-Modernist-Mono.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================
+   DESIGN TOKENS
+============================================================ */
+:root {
+  /* ── Font stacks — defined as variables so overrides are easy ── */
+  --font-heading: 'Neofolia', Georgia, serif;
+  --font-body:    'SK Modernist', 'Inter', system-ui, sans-serif;
+
+  /* ── Brand ── */
+  --color-brand:        #2563EB;
+  --color-brand-hover:  #1D4ED8;
+  --color-brand-light:  #EFF6FF;
+  --color-brand-muted:  rgba(37, 99, 235, 0.08);
+  --color-brand-border: rgba(37, 99, 235, 0.25);
+
+  /* ── Semantic ── */
+  --color-success:      #16A34A;
+  --color-success-bg:   #F0FDF4;
+  --color-danger:       #DC2626;
+  --color-accent:       #0891B2;
+
+  /* ── Surfaces ── */
+  --color-canvas:    #F8FAFC;
+  --color-surface:   #FFFFFF;
+  --color-overlay:   #F1F5F9;
+  --color-overlay-2: #E8EEF6;
+
+  /* ── Text ── */
+  --color-text-primary:   #0F172A;
+  --color-text-secondary: #475569;
+  --color-text-muted:     #94A3B8;
+
+  /* ── Borders ── */
+  --color-border:        #CBD5E1;
+  --color-border-strong: #94A3B8;
+
+  /* ── Shadows ── */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.09), 0 4px 8px rgba(0, 0, 0, 0.05);
+
+  /* ── Gradients ── */
+  --gradient-brand:   linear-gradient(135deg, #2563EB 0%, #0891B2 100%);
+  --gradient-surface: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+
+  /* ── Radii ── */
+  --radius-xs:   4px;
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   14px;
+  --radius-xl:   18px;
+  --radius-full: 9999px;
+
+  /* ── Transitions ── */
+  --transition-fast: 100ms ease;
+  --transition-base: 180ms ease;
+  --transition-slow: 320ms ease;
+
+  /* ── Type scale ── */
+  --text-xs:   11px;
+  --text-sm:   13px;
+  --text-base: 15px;
+  --text-md:   17px;
+  --text-lg:   20px;
+  --text-xl:   24px;
+  --text-2xl:  30px;
+  --text-3xl:  40px;
+}
+
+/* ── Dark mode ── */
+[data-theme="dark"] {
+  --color-canvas:    #0B1120;
+  --color-surface:   #162032;
+  --color-overlay:   #1A2540;
+  --color-overlay-2: #1E2D45;
+
+  --color-brand:        #3B82F6;
+  --color-brand-hover:  #2563EB;
+  --color-brand-light:  rgba(59, 130, 246, 0.12);
+  --color-brand-muted:  rgba(59, 130, 246, 0.1);
+  --color-brand-border: rgba(59, 130, 246, 0.3);
+  --color-accent:       #22D3EE;
+
+  --color-text-primary:   #F1F5F9;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted:     #64748B;
+
+  --color-border:        #1E2D45;
+  --color-border-strong: #2D3F5A;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+  --gradient-surface: linear-gradient(135deg, #162032 0%, #1A2540 100%);
+}
+
+/* ============================================================
+   RESET
+============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { font-size: 16px; }
+
+/* ── BODY: SK Modernist for everything by default ── */
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-canvas);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ── HEADINGS: Neofolia for ALL h1-h6 ── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: normal;   /* Neofolia has built-in weight — don't override to bold */
+  line-height: 1.2;
+  color: var(--color-text-primary);
+}
+
+/* ── Explicit weight utility for headings that need bold ── */
+h1, h2 {
+  letter-spacing: -0.02em;
+}
+
+/* ── Inputs and buttons inherit body font by default ── */
+input, textarea, select, button {
+  font-family: var(--font-body);
+}
+
+/* ── Interactive transitions ── */
+button, a, [role="button"] {
+  transition:
+    color            var(--transition-base),
+    background-color var(--transition-base),
+    border-color     var(--transition-base),
+    box-shadow       var(--transition-base),
+    transform        var(--transition-base),
+    opacity          var(--transition-base);
+}
+
+/* ============================================================
+   SCROLLBAR
+============================================================ */
+::-webkit-scrollbar       { width: 5px; }
+::-webkit-scrollbar-track { background: var(--color-canvas); }
+::-webkit-scrollbar-thumb { background: var(--color-brand); border-radius: 3px; }
+
+/* ============================================================
+   SELECTION
+============================================================ */
+::selection { background: var(--color-brand); color: #fff; }
+
+/* ============================================================
+   LAYOUT
+============================================================ */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ============================================================
+   SECTION TYPOGRAPHY
+   These classes use the heading font by inheritance (they
+   contain <h2> elements) but we force it here too for safety.
+============================================================ */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);    /* labels stay SK Modernist */
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-brand);
+  margin-bottom: 0.5rem;
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: var(--gradient-brand);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-family: var(--font-heading);   /* Neofolia */
+  font-size: var(--text-2xl);
+  font-weight: normal;
+  color: var(--color-text-primary);
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.section-subtitle {
+  font-family: var(--font-body);      /* SK Modernist */
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  max-width: 540px;
+}
+
+/* ============================================================
+   CARDS
+============================================================ */
+.glass-card, .card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition:
+    box-shadow       var(--transition-base),
+    border-color     var(--transition-base),
+    background-color var(--transition-base);
+}
+
+.glass-card:hover, .card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border-strong);
+}
+
+/* ============================================================
+   BUTTONS — SK Modernist
+============================================================ */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1.5rem;
+  background: var(--gradient-brand);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: var(--shadow-xs);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1.5rem;
+  background: transparent;
+  color: var(--color-brand);
+  border: 1.5px solid var(--color-brand);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-secondary:hover {
+  background: var(--color-brand);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================================
+   GRADIENT TEXT
+============================================================ */
+.gradient-text {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================================
+   KEYFRAMES
+============================================================ */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes pulse-dot {
+  0%   { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
+  70%  { box-shadow: 0 0 0 6px rgba(22, 163, 74, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width: 768px) {
+  .btn-primary, .btn-secondary {
+    padding: 0.6rem 1.1rem;
+    font-size: var(--text-xs);
+  }
+  .section-subtitle { max-width: 100%; }
+}

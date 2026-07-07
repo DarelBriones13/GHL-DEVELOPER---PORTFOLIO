@@ -1,0 +1,354 @@
+.hero {
+  padding: 4rem 0 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Hero background image ── */
+.hero__bg-image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  z-index: 0;
+  pointer-events: none;
+  /* Hidden in light mode */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Visible only in dark mode */
+[data-theme="dark"] .hero__bg-image {
+  opacity: 0.22;
+}
+
+/* ── Overlay blobs + grid ── */
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hero__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.08;
+}
+
+.hero__blob--1 {
+  width: 480px; height: 480px;
+  background: var(--color-brand);
+  top: -160px; right: -60px;
+  animation: float 9s ease-in-out infinite;
+}
+
+.hero__blob--2 {
+  width: 320px; height: 320px;
+  background: var(--color-accent);
+  bottom: -60px; left: -60px;
+  animation: float 11s ease-in-out infinite reverse;
+}
+
+.hero__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--color-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+  background-size: 52px 52px;
+  opacity: 0.25;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 80%);
+}
+
+/* ── Main grid ── */
+.hero__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.5rem;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Left content ── */
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.85rem;
+  background: var(--color-brand-muted);
+  border: 1px solid var(--color-brand-border);
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-brand);
+  width: fit-content;
+}
+
+.hero__badge-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--color-success);
+  flex-shrink: 0;
+  animation: pulse-dot 2s ease-out infinite;
+}
+
+/* ── HEADING: Neofolia ── */
+.hero__heading {
+  font-family: var(--font-heading);
+  font-size: var(--text-3xl);
+  font-weight: normal;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.hero__name { display: block; }
+
+/* ── Subtitle typewriter: SK Modernist ── */
+.hero__subtitle {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  min-height: 1.75rem;
+}
+
+.hero__type-text { color: var(--color-accent); }
+
+.hero__cursor {
+  display: inline-block;
+  color: var(--color-accent);
+  font-weight: 300;
+  animation: blink 1s step-end infinite;
+  margin-left: 1px;
+}
+
+.hero__description {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  max-width: 460px;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Social row */
+.hero__social {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.1rem;
+}
+
+.hero__social-link {
+  width: 36px; height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.hero__social-link:hover {
+  border-color: var(--color-brand-border);
+  color: var(--color-brand);
+  background: var(--color-brand-muted);
+  transform: translateY(-2px);
+}
+
+.hero__social-divider {
+  width: 1px; height: 16px;
+  background: var(--color-border);
+}
+
+.hero__social-label {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+/* ── Right: card cluster ── */
+.hero__visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero__card-wrapper {
+  position: relative;
+  width: 310px;
+  height: 350px;
+}
+
+.hero__main-card {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 230px;
+  padding: 1.5rem;
+  text-align: center;
+  border-radius: var(--radius-xl);
+}
+
+.hero__card-avatar {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: var(--gradient-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.85rem;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  position: relative;
+}
+
+.hero__card-avatar img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 50%;
+  display: block;
+}
+
+.hero__card-avatar-fallback {
+  display: none;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);   /* Neofolia */
+  font-size: 1.4rem;
+  font-weight: normal;
+  color: #fff;
+}
+
+/* Card name uses Neofolia (inherited from h3 global rule) */
+.hero__card-info h3 {
+  font-size: var(--text-sm);
+  margin-bottom: 0.2rem;
+  /* font-family inherited from global h3 → var(--font-heading) */
+}
+
+.hero__card-info p {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  margin-bottom: 0.6rem;
+}
+
+.hero__card-tags {
+  display: flex;
+  gap: 0.28rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero__card-tags-inner {
+  display: flex;
+  gap: 0.28rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.hero__card-tags span {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  padding: 0.15rem 0.4rem;
+  background: var(--color-brand-muted);
+  color: var(--color-brand);
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--color-brand-border);
+}
+
+/* Floating mini-cards */
+.hero__float-card {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 0.85rem;
+  min-width: 115px;
+  border-radius: var(--radius-md);
+}
+
+.hero__float-card--1 { top: 6px;     right: -6px; }
+.hero__float-card--2 { bottom: 24px;  right: -14px; }
+.hero__float-card--3 { top: 32px;    left: -14px; }
+
+.hero__float-icon {
+  width: 28px; height: 28px;
+  border-radius: var(--radius-sm);
+  background: var(--color-brand-muted);
+  color: var(--color-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hero__float-label {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-bottom: 0.05rem;
+}
+
+/* Float value uses heading font for impact */
+.hero__float-value {
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  font-weight: normal;
+  color: var(--color-text-primary);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .hero__container {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    text-align: center;
+  }
+  .hero__content     { align-items: center; }
+  .hero__description { max-width: 100%; }
+  .hero__visual      { order: -1; }
+  .hero__actions     { justify-content: center; }
+  .hero__social      { justify-content: center; }
+  .hero__stats-container { padding: 1.25rem; }
+  .hero__stats-inner { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .hero { padding: 2.5rem 0 2rem; }
+  .hero__card-wrapper { width: 260px; height: 300px; }
+  .hero__main-card    { width: 200px; }
+  .hero__float-card--1 { right: -2px; }
+  .hero__float-card--2 { right: -2px; }
+  .hero__float-card--3 { left: -2px; }
+}

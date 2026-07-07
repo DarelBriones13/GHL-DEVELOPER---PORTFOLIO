@@ -1,0 +1,39 @@
+.layout {
+  min-height: 100vh;
+}
+
+.layout__container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 6rem 1.5rem 0;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.layout__sidebar {
+  /* Sidebar is sticky via its own CSS */
+}
+
+.layout__main {
+  min-width: 0;
+}
+
+@media (max-width: 1200px) {
+  .layout__container {
+    grid-template-columns: 260px 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .layout__container {
+    grid-template-columns: 1fr;
+    padding-top: 5rem;
+  }
+
+  .layout__sidebar {
+    /* Show sidebar at top on mobile */
+  }
+}

@@ -1,0 +1,62 @@
+/* ── Mode Toggle Pill ── */
+.mode-toggle {
+  position: relative;
+  display: inline-flex;
+  background: var(--color-overlay);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  flex-shrink: 0;
+  /* Ensure the indicator stays inside */
+  isolation: isolate;
+}
+
+.mode-toggle__btn {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.36rem 0.8rem;
+  border-radius: calc(var(--radius-sm) - 2px);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  min-width: 100px;
+  /* Don't animate color — the indicator provides the visual feedback */
+  transition: none;
+}
+
+/* Active button text is white because gradient indicator is behind it */
+.mode-toggle__btn--active {
+  color: #fff;
+}
+
+.mode-toggle__btn:not(.mode-toggle__btn--active):hover {
+  color: var(--color-text-primary);
+}
+
+/* The sliding gradient pill underneath */
+.mode-toggle__indicator {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  width: calc(50% - 1px);
+  background: var(--gradient-brand);
+  border-radius: calc(var(--radius-sm) - 2px);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Compact version used inside the Navbar */
+.navbar__mode-toggle .mode-toggle__btn {
+  min-width: 88px;
+  padding: 0.3rem 0.65rem;
+}

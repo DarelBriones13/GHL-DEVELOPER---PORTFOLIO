@@ -1,0 +1,77 @@
+.app {
+  background: var(--color-canvas);
+  min-height: 100vh;
+  transition: background-color 0.3s ease;
+}
+
+/* Two-column layout */
+.app__layout {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 5.5rem 2rem 0;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* Sidebar — sticky, hidden scrollbar */
+.app__sidebar {
+  position: sticky;
+  top: 86px;
+  max-height: calc(100vh - 106px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 2rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.app__sidebar::-webkit-scrollbar { display: none; }
+
+/* Main — never clip */
+.app__main { min-width: 0; }
+
+/* Alternating section backgrounds — 60/30 rule */
+.app__main > section:nth-child(even) {
+  background: var(--color-overlay);
+}
+
+/* Section dividers */
+.app__main > section {
+  border-bottom: 1px solid var(--color-border);
+}
+.app__main > section:last-child { border-bottom: none; }
+
+/* Section base */
+.section {
+  position: relative;
+  padding: 5rem 0;
+}
+
+/* Responsive */
+@media (max-width: 1280px) {
+  .app__layout {
+    grid-template-columns: 255px 1fr;
+    gap: 2rem;
+    padding: 5.5rem 1.5rem 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .app__layout {
+    grid-template-columns: 1fr;
+    padding: 5rem 1.5rem 0;
+    gap: 1.5rem;
+  }
+  .app__sidebar {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding-bottom: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .app__layout { padding: 4.5rem 1rem 0; gap: 1rem; }
+  .section { padding: 3.5rem 0; }
+}
