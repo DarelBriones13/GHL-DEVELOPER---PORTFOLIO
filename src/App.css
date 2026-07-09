@@ -1,7 +1,7 @@
 .app {
   background: var(--color-canvas);
   min-height: 100vh;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.4s ease;
 }
 
 /* Two-column layout */
@@ -10,7 +10,7 @@
   margin: 0 auto;
   padding: 5.5rem 2rem 0;
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 285px 1fr;
   gap: 2.5rem;
   align-items: start;
 }
@@ -31,12 +31,7 @@
 /* Main — never clip */
 .app__main { min-width: 0; }
 
-/* Alternating section backgrounds — 60/30 rule */
-.app__main > section:nth-child(even) {
-  background: var(--color-overlay);
-}
-
-/* Section dividers */
+/* Subtle section separation */
 .app__main > section {
   border-bottom: 1px solid var(--color-border);
 }

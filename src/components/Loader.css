@@ -3,6 +3,7 @@
   inset: 0;
   z-index: 9999;
   background: var(--color-canvas);
+  background-image: var(--gradient-mesh);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,31 +12,32 @@
 }
 
 .loader__logo {
-  width: 60px;
-  height: 60px;
+  width: 64px; height: 64px;
   background: var(--gradient-brand);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-heading);   /* Neofolia for the brand letter */
-  font-size: 1.75rem;
+  font-family: var(--font-heading);
+  font-size: 1.85rem;
   font-weight: normal;
   color: #fff;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-brand), var(--shadow-glow);
 }
 
 .loader__bar {
   width: 0;
   height: 2px;
   background: var(--gradient-brand);
-  border-radius: 2px;
+  border-radius: var(--radius-full);
   max-width: 180px;
+  box-shadow: var(--shadow-glow);
 }
 
 .loader__text {
   font-size: var(--text-xs);
   color: var(--color-text-muted);
   font-family: var(--font-body);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
