@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FiExternalLink, FiGithub, FiX, FiCheck, FiClock,
-  FiSettings, FiCpu, FiLayers, FiGlobe, FiSmartphone, FiLayout,
+  FiSettings, FiCpu, FiLayers, FiGlobe, FiSmartphone,
   FiChevronLeft, FiChevronRight, FiMaximize2,
 } from 'react-icons/fi';
 import { devMode, ghlMode } from '../data/portfolioData';
@@ -13,17 +13,10 @@ const CATEGORY_ICON = {
   'AI & Automation': FiCpu,
   'Web Application': FiLayers,
   'Mobile': FiSmartphone,
-  'Frontend': FiLayout,
+  'Frontend': FiLayers,
 };
 
-/* ── 3 slot configs: left / centre / right ── */
-const SLOTS = [
-  { tx: '-32%', ry: 28, tz: -120, scale: 0.82, op: 0.60 }, // left
-  { tx: '-50%', ry:  0, tz:    0, scale: 1.00, op: 1.00 }, // centre
-  { tx: '-68%', ry:-28, tz: -120, scale: 0.82, op: 0.60 }, // right
-];
-
-/* ── Image lightbox ── */
+/* ─── Image lightbox ─── */
 const Lightbox = ({ src, alt, onClose }) => {
   useEffect(() => {
     const fn = (e) => e.key === 'Escape' && onClose();
@@ -31,35 +24,26 @@ const Lightbox = ({ src, alt, onClose }) => {
     document.body.style.overflow = 'hidden';
     return () => { document.removeEventListener('keydown', fn); document.body.style.overflow = ''; };
   }, [onClose]);
-
   return (
     <motion.div className="lb-overlay"
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
-      onClick={onClose}
-    >
-      <motion.img
-        className="lb-img"
-        src={src} alt={alt}
-        initial={{ opacity: 0, scale: 0.88 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.92 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 26 }}
-        onClick={(e) => e.stopPropagation()}
-      />
-      <button className="lb-close" onClick={onClose} aria-label="Close image">
-        <FiX size={20} />
-      </button>
+      transition={{ duration: 0.18 }} onClick={onClose}>
+      <motion.img className="lb-img" src={src} alt={alt}
+        initial={{ scale: 0.85, opacity: 0 }}
+        animate={{ scale: 1,    opacity: 1 }}
+        exit={{    scale: 0.9,  opacity: 0 }}
+        transition={{ type: 'spring', stiffness: 280, damping: 24 }}
+        onClick={(e) => e.stopPropagation()} />
+      <button className="lb-close" onClick={onClose}><FiX size={20} /></button>
     </motion.div>
   );
 };
 
-/* ── Detail modal ── */
+/* ─── Detail modal ─── */
 const ProjectModal = ({ project, isGhl, onClose }) => {
   const [lightbox, setLightbox] = useState(false);
-
   useEffect(() => {
-    const fn = (e) => e.key === 'Escape' && !lightbox && onClose();
+    const fn = (e) => { if (e.key === 'Escape' && !lightbox) onClose(); };
     document.addEventListener('keydown', fn);
     document.body.style.overflow = 'hidden';
     return () => { document.removeEventListener('keydown', fn); document.body.style.overflow = ''; };
@@ -69,31 +53,23 @@ const ProjectModal = ({ project, isGhl, onClose }) => {
     <>
       <motion.div className="pm-overlay"
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }} onClick={onClose}>
+        transition={{ duration: 0.18 }} onClick={onClose}>
         <motion.div className="pm-panel"
-          initial={{ opacity: 0, scale: 0.88, y: 48 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.92, y: 24 }}
-          transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+          initial={{ opacity: 0, y: 60, scale: 0.92 }}
+          animate={{ opacity: 1, y: 0,  scale: 1    }}
+          exit={{    opacity: 0, y: 30, scale: 0.95 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 28 }}
           onClick={(e) => e.stopPropagation()}>
 
-          {/* Hero — click image to open lightbox */}
           <div className="pm-hero" style={{ background: project.gradient }}>
+            {project.image && <img src={project.image} alt={project.title} className="pm-hero__img" />}
+            <div className="pm-hero__scrim" />
+            <button className="pm-close" onClick={onClose}><FiX size={16} /></button>
             {project.image && (
-              <>
-                <img src={project.image} alt={project.title} className="pm-hero__img" />
-                <button
-                  className="pm-expand"
-                  onClick={() => setLightbox(true)}
-                  aria-label="View full image"
-                  title="View full image"
-                >
-                  <FiMaximize2 size={15} />
-                </button>
-              </>
+              <button className="pm-expand" onClick={() => setLightbox(true)} title="View full image">
+                <FiMaximize2 size={14} />
+              </button>
             )}
-            <div className="pm-hero__overlay" />
-            <button className="pm-close" onClick={onClose} aria-label="Close"><FiX size={18} /></button>
             <div className="pm-hero__meta">
               <span className="pm-cat">{isGhl ? 'GoHighLevel CRM' : project.category}</span>
               <h2 className="pm-title">{project.title}</h2>
@@ -102,45 +78,41 @@ const ProjectModal = ({ project, isGhl, onClose }) => {
 
           <div className="pm-body">
             <p className="pm-desc">{project.description}</p>
-
             {!isGhl && project.tech && (
               <div className="pm-section">
-                <h4 className="pm-section-title">Tech Stack</h4>
+                <h4 className="pm-section-label">Tech Stack</h4>
                 <div className="pm-tags">{project.tech.map(t => <span key={t} className="pm-tag">{t}</span>)}</div>
               </div>
             )}
-
             {isGhl && project.features && (
               <div className="pm-section">
-                <h4 className="pm-section-title">Features</h4>
+                <h4 className="pm-section-label">Features</h4>
                 <ul className="pm-features">
                   {project.features.map(f => (
-                    <li key={f} className="pm-feature"><FiCheck size={12} /><span>{f}</span></li>
+                    <li key={f} className="pm-feature"><FiCheck size={11} /><span>{f}</span></li>
                   ))}
                 </ul>
               </div>
             )}
-
             <div className="pm-actions">
               {!isGhl && project.github && (
                 <a href={project.github} target="_blank" rel="noopener noreferrer" className="pm-btn pm-btn--ghost">
-                  <FiGithub size={14} /> GitHub
+                  <FiGithub size={13} /> GitHub
                 </a>
               )}
               {project.demo && project.demo !== '#' && (
                 <a href={project.demo} target="_blank" rel="noopener noreferrer" className="pm-btn pm-btn--primary">
-                  <FiExternalLink size={14} /> Live Demo
+                  <FiExternalLink size={13} /> Live Demo
                 </a>
               )}
               {isGhl && project.status === 'upcoming' && (
-                <span className="pm-upcoming"><FiClock size={13} /> Coming Soon</span>
+                <span className="pm-badge-coming"><FiClock size={12} /> Coming Soon</span>
               )}
             </div>
           </div>
         </motion.div>
       </motion.div>
 
-      {/* Lightbox — on top of modal */}
       <AnimatePresence>
         {lightbox && project.image && (
           <Lightbox src={project.image} alt={project.title} onClose={() => setLightbox(false)} />
@@ -150,21 +122,40 @@ const ProjectModal = ({ project, isGhl, onClose }) => {
   );
 };
 
-/* ── 3-card 3D carousel ── */
+/* ─── 3D Carousel ─── */
+/*
+  Layout strategy:
+  - All 3 rendered cards sit in a flex row centred inside the stage
+  - The stage has overflow:visible so side cards can bleed outside
+  - Each card uses CSS custom props + framer-motion for rotateY / z / scale / opacity
+  - Centre card: full size, face-on
+  - Side cards: scaled down, pushed back (z), rotated inward (rotateY)
+*/
+
+const CARD_W  = 340;   // px — centre card width
+const CARD_H  = 360;   // px — card height
+const SIDE_W  = 260;   // px — side card visible width
+const GAP     = 18;    // px — gap between centre and side cards
+
+// [left, centre, right]
+const TRANSFORMS = [
+  { rotateY:  28, z: -140, scale: 0.80, opacity: 0.55, x: -(CARD_W/2 + SIDE_W/2 + GAP) },
+  { rotateY:   0, z:    0, scale: 1.00, opacity: 1.00, x: 0 },
+  { rotateY: -28, z: -140, scale: 0.80, opacity: 0.55, x:  (CARD_W/2 + SIDE_W/2 + GAP) },
+];
+
 const Carousel3D = ({ projects, isGhl }) => {
-  const total = projects.length;
-  const [active, setActive] = useState(0);
-  const [dir, setDir] = useState(0);         // -1 left, +1 right for exit animation hint
+  const total     = projects.length;
+  const [active, setActive]   = useState(0);
   const [selected, setSelected] = useState(null);
-  const dragX = useRef(0);
-  const animating = useRef(false);
+  const dragX   = useRef(0);
+  const blocked = useRef(false);
 
   const go = useCallback((delta) => {
-    if (animating.current) return;
-    animating.current = true;
-    setDir(delta);
+    if (blocked.current) return;
+    blocked.current = true;
     setActive(c => ((c + delta) % total + total) % total);
-    setTimeout(() => { animating.current = false; }, 420);
+    setTimeout(() => { blocked.current = false; }, 460);
   }, [total]);
 
   useEffect(() => {
@@ -179,85 +170,79 @@ const Carousel3D = ({ projects, isGhl }) => {
     return () => clearInterval(id);
   }, [go, selected]);
 
-  // which project index maps to which slot (left=0, centre=1, right=2)
-  const slotProjects = [
-    projects[((active - 1) % total + total) % total],
-    projects[active],
-    projects[(active + 1) % total],
+  const slots = [
+    projects[((active - 1) % total + total) % total],  // left
+    projects[active],                                    // centre
+    projects[(active + 1) % total],                      // right
   ];
 
   return (
     <>
-      <div className="c3-wrap">
-        {/* Arrows */}
+      <div className="c3-root">
+        {/* Left arrow */}
         <button className="c3-arrow c3-arrow--l" onClick={() => go(-1)} aria-label="Previous">
-          <FiChevronLeft size={22} />
-        </button>
-        <button className="c3-arrow c3-arrow--r" onClick={() => go(1)} aria-label="Next">
-          <FiChevronRight size={22} />
+          <FiChevronLeft size={20} />
         </button>
 
-        {/* Stage */}
+        {/* Stage — perspective wrapper */}
         <div className="c3-stage"
           onMouseDown={e => { dragX.current = e.clientX; }}
-          onMouseUp={e => { const d = e.clientX - dragX.current; if (Math.abs(d) > 50) go(d < 0 ? 1 : -1); }}
+          onMouseUp={e   => { const d = e.clientX - dragX.current; if (Math.abs(d) > 50) go(d < 0 ? 1 : -1); }}
           onTouchStart={e => { dragX.current = e.touches[0].clientX; }}
-          onTouchEnd={e => { const d = e.changedTouches[0].clientX - dragX.current; if (Math.abs(d) > 40) go(d < 0 ? 1 : -1); }}
+          onTouchEnd={e   => { const d = e.changedTouches[0].clientX - dragX.current; if (Math.abs(d) > 40) go(d < 0 ? 1 : -1); }}
         >
-          {slotProjects.map((project, slot) => {
-            const s = SLOTS[slot];
-            const isCentre = slot === 1;
-            const Icon = CATEGORY_ICON[project.category] || (isGhl ? FiSettings : FiGlobe);
+          {slots.map((project, slot) => {
+            const tf      = TRANSFORMS[slot];
+            const isC     = slot === 1;
+            const Icon    = CATEGORY_ICON[project.category] || (isGhl ? FiSettings : FiGlobe);
+            const cardW   = isC ? CARD_W : SIDE_W;
 
             return (
               <motion.div
                 key={`${active}-${slot}`}
-                className={`c3-card${isCentre ? ' c3-card--active' : ''}`}
-                style={{ left: s.tx }}
+                className={`c3-card${isC ? ' c3-card--centre' : ''}`}
+                style={{ width: cardW, height: CARD_H, cursor: isC ? 'pointer' : 'default' }}
                 animate={{
-                  rotateY: s.ry,
-                  z: s.tz,
-                  scale: s.scale,
-                  opacity: s.op,
+                  x:       tf.x,
+                  rotateY: tf.rotateY,
+                  z:       tf.z,
+                  scale:   tf.scale,
+                  opacity: tf.opacity,
                 }}
                 initial={{
-                  rotateY: s.ry + (dir * -15),
-                  z: s.tz - 60,
-                  scale: s.scale - 0.05,
+                  x:       tf.x + (slot === 0 ? 60 : slot === 2 ? -60 : 0),
+                  rotateY: tf.rotateY,
+                  z:       tf.z - 80,
+                  scale:   tf.scale * 0.9,
                   opacity: 0,
                 }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 300,
-                  damping: 30,
-                  mass: 0.85,
-                }}
-                onClick={() => {
-                  if (isCentre) setSelected(project);
-                  else go(slot === 0 ? -1 : 1);
-                }}
+                transition={{ type: 'spring', stiffness: 280, damping: 30, mass: 0.9 }}
+                onClick={() => { if (isC) setSelected(project); else go(slot === 0 ? -1 : 1); }}
+                whileHover={isC ? { z: 20, scale: 1.02, transition: { duration: 0.2 } } : {}}
               >
-                {/* Image */}
-                <div className="c3-card__img" style={{ background: project.gradient }}>
+                {/* Image fill */}
+                <div className="c3-img-wrap" style={{ background: project.gradient }}>
                   {project.image
-                    ? <img src={project.image} alt={project.title} />
-                    : <div className="c3-card__icon"><Icon size={36} /></div>
+                    ? <img src={project.image} alt={project.title} className="c3-img" />
+                    : <div className="c3-icon"><Icon size={isC ? 38 : 28} /></div>
                   }
-                  <div className="c3-card__vignette" />
-                  {isCentre && <div className="c3-card__grad" />}
+                  {/* subtle vignette on all cards */}
+                  <div className="c3-vignette" />
+                  {/* bottom scrim only on centre */}
+                  {isC && <div className="c3-scrim" />}
                 </div>
 
-                {/* Label — centre only */}
+                {/* Text label — centre only */}
                 <AnimatePresence>
-                  {isCentre && (
-                    <motion.div className="c3-card__info"
-                      initial={{ opacity: 0, y: 12 }}
+                  {isC && (
+                    <motion.div className="c3-label"
+                      initial={{ opacity: 0, y: 14 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 6 }}
-                      transition={{ duration: 0.28, delay: 0.1 }}>
-                      <span className="c3-card__cat">{isGhl ? 'GoHighLevel' : project.category}</span>
-                      <h3 className="c3-card__title">{project.title}</h3>
-                      <span className="c3-card__hint">Click to view details</span>
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.26, delay: 0.1 }}>
+                      <span className="c3-cat">{isGhl ? 'GoHighLevel' : project.category}</span>
+                      <h3 className="c3-title">{project.title}</h3>
+                      <span className="c3-hint">Click to view details</span>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -265,6 +250,11 @@ const Carousel3D = ({ projects, isGhl }) => {
             );
           })}
         </div>
+
+        {/* Right arrow */}
+        <button className="c3-arrow c3-arrow--r" onClick={() => go(1)} aria-label="Next">
+          <FiChevronRight size={20} />
+        </button>
       </div>
 
       {/* Dots */}
@@ -272,9 +262,7 @@ const Carousel3D = ({ projects, isGhl }) => {
         {projects.map((_, i) => (
           <button key={i}
             className={`c3-dot${i === active ? ' c3-dot--on' : ''}`}
-            onClick={() => { setDir(i > active ? 1 : -1); setActive(i); }}
-            aria-label={`Project ${i + 1}`}
-          />
+            onClick={() => setActive(i)} aria-label={`Project ${i + 1}`} />
         ))}
       </div>
 
@@ -288,7 +276,7 @@ const Carousel3D = ({ projects, isGhl }) => {
   );
 };
 
-/* ── Section ── */
+/* ─── Section ─── */
 const Projects = () => {
   const { mode } = useMode();
   return (
@@ -305,7 +293,7 @@ const Projects = () => {
           </h2>
           <p className="section-subtitle">
             {mode === 'dev'
-              ? 'Click the centre card to explore — click the image inside to view it full screen.'
+              ? 'Click the centre card to explore. Click the image to view full screen.'
               : 'Complete CRM systems built with GoHighLevel. Click to explore.'}
           </p>
         </motion.div>
