@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiFileText, FiArrowRight, FiGithub, FiLinkedin, FiZap, FiBox, FiCpu } from 'react-icons/fi';
+import { FiFileText, FiArrowRight, FiGithub, FiLinkedin } from 'react-icons/fi';
 import { personalInfo, devMode, ghlMode } from '../data/portfolioData';
 import { scrollTo } from '../utils/scrollTo';
 import { useTypewriter } from '../hooks/useTypewriter';
 import { useMode } from '../context/ModeContext';
 import ModeToggle from './ModeToggle';
 import ResumeModal from './ResumeModal';
+import HoloCard from './HoloCard';
 import './Hero.css';
 
-const HERO_BG     = '/assets/hero-background.png';
-const PROFILE_PIC = '/assets/profile-pic.png';
+const HERO_BG = '/assets/hero-background.png';
 
 const Hero = () => {
   const { mode } = useMode();
@@ -119,72 +119,14 @@ const Hero = () => {
           </motion.div>
         </div>
 
-        {/* ── Right: card cluster ── */}
+        {/* ── Right: Holographic Access Card ── */}
         <motion.div
           className="hero__visual"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.25, ease: 'easeOut' }}
         >
-          <div className="hero__card-wrapper">
-
-            <div className="hero__main-card glass-card">
-              <div className="hero__card-avatar">
-                <img
-                  src={PROFILE_PIC}
-                  alt="Darel S. Briones"
-                  onError={e => {
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextSibling.style.display = 'flex';
-                  }}
-                />
-                <span className="hero__card-avatar-fallback">DB</span>
-              </div>
-              <div className="hero__card-info">
-                <h3>Darel S. Briones</h3>
-                <p>{mode === 'dev' ? 'Full-Stack Developer' : 'GHL Developer & VA'}</p>
-                <div className="hero__card-tags">
-                  <div className="hero__card-tags-inner">
-                    {(mode === 'dev'
-                      ? ['React', 'Laravel', 'Python']
-                      : ['GoHighLevel', 'CRM', 'Automation']
-                    ).map(t => <span key={t}>{t}</span>)}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <motion.div className="hero__float-card hero__float-card--1 glass-card"
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}>
-              <div className="hero__float-icon" aria-hidden="true"><FiZap size={14} /></div>
-              <div>
-                <p className="hero__float-label">{mode === 'dev' ? 'Projects' : 'GHL Systems'}</p>
-                <p className="hero__float-value">{mode === 'dev' ? '8+' : '3+'}</p>
-              </div>
-            </motion.div>
-
-            <motion.div className="hero__float-card hero__float-card--2 glass-card"
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}>
-              <div className="hero__float-icon" aria-hidden="true"><FiBox size={14} /></div>
-              <div>
-                <p className="hero__float-label">{mode === 'dev' ? 'Technologies' : 'Automations'}</p>
-                <p className="hero__float-value">{mode === 'dev' ? '15+' : '10+'}</p>
-              </div>
-            </motion.div>
-
-            <motion.div className="hero__float-card hero__float-card--3 glass-card"
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}>
-              <div className="hero__float-icon" aria-hidden="true"><FiCpu size={14} /></div>
-              <div>
-                <p className="hero__float-label">{mode === 'dev' ? 'AI Projects' : 'VA Skills'}</p>
-                <p className="hero__float-value">{mode === 'dev' ? '2+' : '20+'}</p>
-              </div>
-            </motion.div>
-
-          </div>
+          <HoloCard />
         </motion.div>
       </div>
 
