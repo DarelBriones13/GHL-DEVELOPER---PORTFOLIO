@@ -1,9 +1,8 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
 import {
-  FiExternalLink, FiGithub, FiChevronLeft, FiChevronRight,
-  FiX, FiCheck, FiClock, FiSettings, FiCpu, FiLayers,
-  FiGlobe, FiSmartphone, FiLayout,
+  FiExternalLink, FiGithub, FiX, FiCheck, FiClock,
+  FiSettings, FiCpu, FiLayers, FiGlobe, FiSmartphone, FiLayout,
 } from 'react-icons/fi';
 import { devMode, ghlMode } from '../data/portfolioData';
 import { useMode } from '../context/ModeContext';
@@ -16,9 +15,9 @@ const CATEGORY_ICON = {
   'Frontend': FiLayout,
 };
 
-/* ─────────────────────────────────────────────
-   Expanded detail modal (portal-style)
-───────────────────────────────────────────── */
+/* ─────────────────────────────────────────
+   Expanded detail modal
+───────────────────────────────────────── */
 const ProjectModal = ({ project, isGhl, onClose }) => {
   useEffect(() => {
     const onKey = (e) => e.key === 'Escape' && onClose();
@@ -31,261 +30,246 @@ const ProjectModal = ({ project, isGhl, onClose }) => {
   }, [onClose]);
 
   return (
-    <AnimatePresence>
+    <motion.div
+      className="pm-overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.22 }}
+      onClick={onClose}
+    >
       <motion.div
-        className="pm-overlay"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.25 }}
-        onClick={onClose}
+        className="pm-panel"
+        initial={{ opacity: 0, scale: 0.86, y: 50 }}
+        animate={{ opacity: 1, scale: 1,    y: 0  }}
+        exit={{    opacity: 0, scale: 0.92,  y: 24 }}
+        transition={{ type: 'spring', stiffness: 320, damping: 26 }}
+        onClick={(e) => e.stopPropagation()}
       >
-        <motion.div
-          className="pm-panel"
-          initial={{ opacity: 0, scale: 0.88, y: 40 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.92, y: 20 }}
-          transition={{ type: 'spring', stiffness: 340, damping: 28 }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Image / gradient hero */}
-          <div
-            className="pm-hero"
-            style={{ background: project.gradient }}
-          >
-            {project.image && (
-              <img src={project.image} alt={project.title} className="pm-hero__img" />
-            )}
-            <div className="pm-hero__overlay" />
-            <button className="pm-close" onClick={onClose} aria-label="Close">
-              <FiX size={18} />
-            </button>
-            <div className="pm-hero__title-wrap">
-              <span className="pm-category">
-                {isGhl ? 'GoHighLevel CRM' : project.category}
-              </span>
-              <h2 className="pm-title">{project.title}</h2>
-            </div>
+        {/* Hero */}
+        <div className="pm-hero" style={{ background: project.gradient }}>
+          {project.image && (
+            <img src={project.image} alt={project.title} className="pm-hero__img" />
+          )}
+          <div className="pm-hero__overlay" />
+          <button className="pm-close" onClick={onClose} aria-label="Close"><FiX size={18} /></button>
+          <div className="pm-hero__title-wrap">
+            <span className="pm-category">{isGhl ? 'GoHighLevel CRM' : project.category}</span>
+            <h2 className="pm-title">{project.title}</h2>
           </div>
+        </div>
 
-          {/* Body */}
-          <div className="pm-body">
-            <p className="pm-desc">{project.description}</p>
+        {/* Body */}
+        <div className="pm-body">
+          <p className="pm-desc">{project.description}</p>
 
-            {/* Tech stack (dev) */}
-            {!isGhl && project.tech && (
-              <div className="pm-section">
-                <h4 className="pm-section-title">Tech Stack</h4>
-                <div className="pm-tags">
-                  {project.tech.map(t => (
-                    <span key={t} className="pm-tag">{t}</span>
-                  ))}
-                </div>
+          {!isGhl && project.tech && (
+            <div className="pm-section">
+              <h4 className="pm-section-title">Tech Stack</h4>
+              <div className="pm-tags">
+                {project.tech.map(t => <span key={t} className="pm-tag">{t}</span>)}
               </div>
-            )}
-
-            {/* Features (ghl) */}
-            {isGhl && project.features && (
-              <div className="pm-section">
-                <h4 className="pm-section-title">Features</h4>
-                <ul className="pm-features">
-                  {project.features.map(f => (
-                    <li key={f} className="pm-feature">
-                      <FiCheck size={12} />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Actions */}
-            <div className="pm-actions">
-              {!isGhl && project.github && (
-                <a href={project.github} target="_blank" rel="noopener noreferrer" className="pm-btn pm-btn--ghost">
-                  <FiGithub size={14} /> GitHub
-                </a>
-              )}
-              {project.demo && project.demo !== '#' && (
-                <a href={project.demo} target="_blank" rel="noopener noreferrer" className="pm-btn pm-btn--primary">
-                  <FiExternalLink size={14} /> Live Demo
-                </a>
-              )}
-              {isGhl && project.status === 'upcoming' && (
-                <span className="pm-upcoming">
-                  <FiClock size={13} /> Coming Soon
-                </span>
-              )}
             </div>
+          )}
+
+          {isGhl && project.features && (
+            <div className="pm-section">
+              <h4 className="pm-section-title">Features</h4>
+              <ul className="pm-features">
+                {project.features.map(f => (
+                  <li key={f} className="pm-feature">
+                    <FiCheck size={12} /><span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div className="pm-actions">
+            {!isGhl && project.github && (
+              <a href={project.github} target="_blank" rel="noopener noreferrer" className="pm-btn pm-btn--ghost">
+                <FiGithub size={14} /> GitHub
+              </a>
+            )}
+            {project.demo && project.demo !== '#' && (
+              <a href={project.demo} target="_blank" rel="noopener noreferrer" className="pm-btn pm-btn--primary">
+                <FiExternalLink size={14} /> Live Demo
+              </a>
+            )}
+            {isGhl && project.status === 'upcoming' && (
+              <span className="pm-upcoming"><FiClock size={13} /> Coming Soon</span>
+            )}
           </div>
-        </motion.div>
+        </div>
       </motion.div>
-    </AnimatePresence>
+    </motion.div>
   );
 };
 
-/* ─────────────────────────────────────────────
-   Cinematic 3-D carousel
-───────────────────────────────────────────── */
-const Carousel = ({ projects, isGhl }) => {
-  const [active, setActive] = useState(0);
+/* ─────────────────────────────────────────
+   Curved panoramic strip
+   — all cards visible, outer ones angled
+   inward like a concave arc
+───────────────────────────────────────── */
+
+/* Perspective transforms per position in the arc.
+   Negative rotY = tilts right face toward viewer (left side of arc)
+   Positive rotY = tilts left face toward viewer (right side of arc) */
+const ARC = [
+  { rotY: -42, x: '-8%',  scale: 0.80, z: -180, brightness: 0.55 },
+  { rotY: -18, x:  '2%',  scale: 0.93, z:  -60, brightness: 0.78 },
+  { rotY:   0, x: '50%',  scale: 1.00, z:    0, brightness: 1.00 },
+  { rotY:  18, x: '98%',  scale: 0.93, z:  -60, brightness: 0.78 },
+  { rotY:  42, x:'108%',  scale: 0.80, z: -180, brightness: 0.55 },
+];
+
+const PanoramaStrip = ({ projects, isGhl }) => {
+  const [offset, setOffset] = useState(0);       // how many positions we've shifted
   const [selected, setSelected] = useState(null);
-  const [dragging, setDragging] = useState(false);
   const dragStart = useRef(0);
   const total = projects.length;
 
-  const prev = useCallback(() => setActive(i => (i - 1 + total) % total), [total]);
-  const next = useCallback(() => setActive(i => (i + 1) % total), [total]);
+  // circular index helper
+  const idx = (i) => ((i % total) + total) % total;
 
-  /* keyboard navigation */
+  // number of arc slots to show (up to 5, but cap at total)
+  const slots = Math.min(5, total);
+  // centre slot index in ARC array
+  const centre = Math.floor(slots / 2);
+
+  // shift offset
+  const shift = useCallback((dir) => {
+    setOffset(o => o + dir);
+  }, []);
+
+  // keyboard
   useEffect(() => {
     const onKey = (e) => {
-      if (e.key === 'ArrowLeft') prev();
-      if (e.key === 'ArrowRight') next();
+      if (e.key === 'ArrowLeft')  shift(-1);
+      if (e.key === 'ArrowRight') shift(1);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [prev, next]);
+  }, [shift]);
 
-  /* auto-advance every 5 s */
+  // auto-scroll
   useEffect(() => {
     if (selected) return;
-    const t = setInterval(next, 5000);
+    const t = setInterval(() => shift(1), 4000);
     return () => clearInterval(t);
-  }, [next, selected]);
-
-  const getSlotFor = (index) => {
-    // distance from active, wrapped
-    let d = (index - active + total) % total;
-    if (d > total / 2) d -= total;
-    return d; // -2 -1 0 1 2
-  };
+  }, [shift, selected]);
 
   return (
-    <div className="carousel">
-      {/* Stage */}
-      <div className="carousel__stage"
-        onMouseDown={e => { setDragging(false); dragStart.current = e.clientX; }}
+    <>
+      <div
+        className="pano"
+        onMouseDown={e => { dragStart.current = e.clientX; }}
         onMouseUp={e => {
           const dx = e.clientX - dragStart.current;
-          if (Math.abs(dx) > 40) { dx < 0 ? next() : prev(); }
+          if (Math.abs(dx) > 40) shift(dx < 0 ? 1 : -1);
         }}
         onTouchStart={e => { dragStart.current = e.touches[0].clientX; }}
         onTouchEnd={e => {
           const dx = e.changedTouches[0].clientX - dragStart.current;
-          if (Math.abs(dx) > 40) { dx < 0 ? next() : prev(); }
+          if (Math.abs(dx) > 40) shift(dx < 0 ? 1 : -1);
         }}
       >
-        {projects.map((project, i) => {
-          const slot = getSlotFor(i);
-          if (Math.abs(slot) > 2) return null; // only render ±2
+        <div className="pano__stage">
+          {Array.from({ length: slots }).map((_, slot) => {
+            const projectIdx = idx(offset + slot - centre);
+            const project = projects[projectIdx];
+            const arc = ARC[slot] || ARC[centre];
+            const isCentre = slot === centre;
+            const Icon = CATEGORY_ICON[project.category] || (isGhl ? FiSettings : FiGlobe);
 
-          const isCenter = slot === 0;
-          const Icon = CATEGORY_ICON[project.category] || (isGhl ? FiSettings : FiGlobe);
+            return (
+              <motion.div
+                key={`slot-${slot}`}
+                className={`pano__card${isCentre ? ' pano__card--centre' : ''}`}
+                style={{ left: arc.x, zIndex: isCentre ? 10 : 5 - Math.abs(slot - centre) }}
+                animate={{
+                  rotateY: arc.rotY,
+                  scale: arc.scale,
+                  z: arc.z,
+                  filter: `brightness(${arc.brightness})`,
+                }}
+                transition={{ type: 'spring', stiffness: 280, damping: 30 }}
+                onClick={() => {
+                  if (isCentre) setSelected(project);
+                  else shift(slot < centre ? -1 : 1);
+                }}
+                whileHover={isCentre ? { filter: 'brightness(1.06)' } : {}}
+              >
+                {/* Image */}
+                <div className="pano__img-wrap" style={{ background: project.gradient }}>
+                  {project.image
+                    ? <img src={project.image} alt={project.title} className="pano__img" />
+                    : <div className="pano__icon"><Icon size={36} /></div>
+                  }
+                  {/* curved inner shadow on edges */}
+                  <div className="pano__curve-left"  />
+                  <div className="pano__curve-right" />
+                  {/* bottom overlay — only on centre */}
+                  {isCentre && <div className="pano__img-gradient" />}
+                </div>
 
-          /* 3-D transform values per slot */
-          const configs = {
-            '-2': { x: '-200%', z: -260, rotY:  40, opacity: 0.25, scale: 0.72 },
-            '-1': { x: '-95%',  z: -120, rotY:  28, opacity: 0.65, scale: 0.85 },
-             '0': { x: '-50%',  z:    0, rotY:   0, opacity: 1,    scale: 1    },
-             '1': { x: '0%',    z: -120, rotY: -28, opacity: 0.65, scale: 0.85 },
-             '2': { x: '100%',  z: -260, rotY: -40, opacity: 0.25, scale: 0.72 },
-          };
-          const cfg = configs[String(slot)] || configs['2'];
+                {/* Label — only on centre */}
+                <AnimatePresence>
+                  {isCentre && (
+                    <motion.div
+                      className="pano__label"
+                      initial={{ opacity: 0, y: 14 }}
+                      animate={{ opacity: 1, y: 0  }}
+                      exit={{    opacity: 0, y: 8  }}
+                      transition={{ duration: 0.3, delay: 0.05 }}
+                    >
+                      <span className="pano__cat">{isGhl ? 'GoHighLevel' : project.category}</span>
+                      <h3 className="pano__title">{project.title}</h3>
+                      <p className="pano__hint">Click to view details</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
+        </div>
 
-          return (
-            <motion.div
-              key={project.id}
-              className={`c-card${isCenter ? ' c-card--active' : ''}`}
-              style={{ cursor: isCenter ? 'pointer' : 'default' }}
-              animate={{
-                x: cfg.x,
-                z: cfg.z,
-                rotateY: cfg.rotY,
-                opacity: cfg.opacity,
-                scale: cfg.scale,
-              }}
-              transition={{ type: 'spring', stiffness: 260, damping: 28 }}
-              onClick={() => {
-                if (isCenter) setSelected(project);
-                else setActive(i);
-              }}
-            >
-              {/* Card image or gradient */}
-              <div className="c-card__img-wrap" style={{ background: project.gradient }}>
-                {project.image
-                  ? <img src={project.image} alt={project.title} className="c-card__img" />
-                  : <div className="c-card__icon"><Icon size={32} /></div>
-                }
-                <div className="c-card__img-overlay" />
-
-                {/* Center card badge */}
-                {isCenter && (project.featured || (isGhl && project.status === 'upcoming')) && (
-                  <div className="c-card__badge">
-                    {project.featured ? '★ Featured' : '⏱ Upcoming'}
-                  </div>
-                )}
-              </div>
-
-              {/* Text block — only visible on center card */}
-              <AnimatePresence>
-                {isCenter && (
-                  <motion.div
-                    className="c-card__info"
-                    initial={{ opacity: 0, y: 18 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    transition={{ duration: 0.35, delay: 0.1 }}
-                  >
-                    <span className="c-card__cat">
-                      {isGhl ? 'GoHighLevel CRM' : project.category}
-                    </span>
-                    <h3 className="c-card__title">{project.title}</h3>
-                    <p className="c-card__desc">{project.description}</p>
-                    <p className="c-card__hint">Click to view details</p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          );
-        })}
+        {/* Dots */}
+        <div className="pano__dots">
+          {projects.map((_, i) => {
+            const active = idx(offset + centre - centre) === i ||
+              idx(((offset % total) + total) % total) === i;
+            // simpler: highlight whichever project is at centre slot
+            const centreProject = idx(offset);
+            return (
+              <button
+                key={i}
+                className={`pano__dot${centreProject === i ? ' pano__dot--active' : ''}`}
+                onClick={() => setOffset(i)}
+                aria-label={`Go to project ${i + 1}`}
+              />
+            );
+          })}
+        </div>
       </div>
 
-      {/* Nav arrows */}
-      <button className="carousel__arrow carousel__arrow--prev" onClick={prev} aria-label="Previous">
-        <FiChevronLeft size={22} />
-      </button>
-      <button className="carousel__arrow carousel__arrow--next" onClick={next} aria-label="Next">
-        <FiChevronRight size={22} />
-      </button>
-
-      {/* Dots */}
-      <div className="carousel__dots">
-        {projects.map((_, i) => (
-          <button
-            key={i}
-            className={`carousel__dot${i === active ? ' carousel__dot--active' : ''}`}
-            onClick={() => setActive(i)}
-            aria-label={`Go to slide ${i + 1}`}
+      {/* Modal */}
+      <AnimatePresence>
+        {selected && (
+          <ProjectModal
+            project={selected}
+            isGhl={isGhl}
+            onClose={() => setSelected(null)}
           />
-        ))}
-      </div>
-
-      {/* Expanded modal */}
-      {selected && (
-        <ProjectModal
-          project={selected}
-          isGhl={isGhl}
-          onClose={() => setSelected(null)}
-        />
-      )}
-    </div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
-/* ─────────────────────────────────────────────
-   Main Projects section
-───────────────────────────────────────────── */
+/* ─────────────────────────────────────────
+   Section
+───────────────────────────────────────── */
 const Projects = () => {
   const { mode } = useMode();
 
@@ -310,8 +294,8 @@ const Projects = () => {
           </h2>
           <p className="section-subtitle">
             {mode === 'dev'
-              ? 'Real-world applications — click a card to explore the full details.'
-              : 'Complete CRM systems built with GoHighLevel — click to explore.'
+              ? 'Real-world applications — drag or click the sides to explore.'
+              : 'Complete CRM systems built with GoHighLevel.'
             }
           </p>
         </motion.div>
@@ -325,12 +309,12 @@ const Projects = () => {
             transition={{ duration: 0.35 }}
           >
             {mode === 'ghl' && (
-              <div className="projects__ghl-notice">
+              <p className="projects__ghl-notice">
                 <FiClock size={14} />
-                <span>Portfolio systems currently in development. Coming soon.</span>
-              </div>
+                Portfolio systems currently in development. Coming soon.
+              </p>
             )}
-            <Carousel
+            <PanoramaStrip
               projects={mode === 'dev' ? devMode.projects : ghlMode.projects}
               isGhl={mode === 'ghl'}
             />
