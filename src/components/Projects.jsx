@@ -99,11 +99,11 @@ const ProjectModal = ({ project, isGhl, onClose }) => {
 
 // slot configs: translateX (from stage centre), rotateY, z-depth, opacity
 const SLOTS = [
-  { tx: -44, ry: 42,  tz: -260, op: 0.55, w: 18 },  // far left
-  { tx: -23, ry: 20,  tz:  -80, op: 0.78, w: 22 },  // near left
-  { tx:   0, ry:  0,  tz:    0, op: 1.00, w: 26 },  // centre
-  { tx:  23, ry: -20, tz:  -80, op: 0.78, w: 22 },  // near right
-  { tx:  44, ry: -42, tz: -260, op: 0.55, w: 18 },  // far right
+  { tx: -32, ry: 38,  tz: -200, op: 0.45, w: 16 },  // far left
+  { tx: -17, ry: 18,  tz:  -70, op: 0.72, w: 20 },  // near left
+  { tx:   0, ry:  0,  tz:    0, op: 1.00, w: 24 },  // centre
+  { tx:  17, ry: -18, tz:  -70, op: 0.72, w: 20 },  // near right
+  { tx:  32, ry: -38, tz: -200, op: 0.45, w: 16 },  // far right
 ];
 
 const PanoStrip = ({ projects, isGhl }) => {
