@@ -1,7 +1,7 @@
 .projects { padding: 5rem 0; }
-.projects__header { margin-bottom: 2.5rem; }
+.projects__header { margin-bottom: 3rem; }
 
-.projects__ghl-notice {
+.projects__notice {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -12,74 +12,84 @@
   font-size: var(--text-sm);
   color: var(--color-brand);
   font-weight: 500;
-  margin-bottom: 1.75rem;
-  backdrop-filter: var(--blur-sm);
+  margin-bottom: 2rem;
 }
 
 /* ═══════════════════════════════════════════
    PANORAMIC STRIP
+   The wrap breaks OUT of .container so cards
+   can span the full viewport width, giving a
+   real curved-cinema look.
 ═══════════════════════════════════════════ */
-.pano {
+.pano-wrap {
+  /* Break out of parent container padding */
   position: relative;
-  width: 100%;
-  padding-bottom: 2.5rem; /* room for dots */
+  width: 100vw;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow: hidden;
+  padding: 0 0 1rem;
+}
+
+/* 3-D stage — perspective set here */
+.pano-stage {
+  position: relative;
+  height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
+  overflow: visible;
   user-select: none;
   cursor: grab;
 }
-.pano:active { cursor: grabbing; }
+.pano-stage:active { cursor: grabbing; }
 
-/* Stage — wide, overflow visible so side cards bleed out */
-.pano__stage {
-  position: relative;
-  height: 400px;
-  perspective: 1000px;
-  perspective-origin: 50% 48%;
-  /* let side panels bleed horizontally */
-  overflow: visible;
-}
-
-/* ── Each panel ── */
-.pano__card {
+/* ── Individual card ── */
+.pano-card {
   position: absolute;
-  top: 0;
-  /* left is set inline via ARC config */
-  transform-origin: center center;
-  width: 28%;          /* relative width of each panel */
+  /* width driven by --slot-w custom prop set inline */
+  width: var(--slot-w, 22%);
   height: 100%;
+  transform-origin: center center;
+  transform-style: preserve-3d;
   border-radius: 6px;
   overflow: hidden;
-  cursor: pointer;
-  will-change: transform, filter;
-  /* translate so card anchors to its left value */
-  transform: translateX(-50%);
+  will-change: transform, opacity;
+  /* left 50% = anchored at stage centre, framer-motion handles translateX */
+  left: 50%;
+  margin-left: calc(var(--slot-w, 22%) / -2);
 }
 
-.pano__card--centre {
-  width: 32%;          /* centre panel slightly wider */
-  z-index: 10 !important;
+.pano-card--active {
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.2);
 }
 
 /* Image fill */
-.pano__img-wrap {
-  width: 100%; height: 100%;
+.pano-card__img {
   position: relative;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
-.pano__img {
+.pano-card__img img {
   width: 100%; height: 100%;
   object-fit: cover;
   object-position: top center;
   display: block;
-  transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+  transition: transform 0.55s ease;
 }
 
-.pano__card--centre:hover .pano__img {
+.pano-card--active:hover .pano-card__img img {
   transform: scale(1.04);
 }
 
-/* Icon fallback */
-.pano__icon {
+.pano-card__icon {
   width: 100%; height: 100%;
   display: flex;
   align-items: center;
@@ -87,79 +97,97 @@
   color: rgba(255,255,255,0.6);
 }
 
-/* Concave inner-edge shadow — left and right of each panel
-   simulates the curved light bending at the panel edges */
-.pano__curve-left {
-  position: absolute;
-  top: 0; left: 0; bottom: 0;
-  width: 22%;
-  background: linear-gradient(to right, rgba(0,0,0,0.28) 0%, transparent 100%);
-  pointer-events: none;
-}
-
-.pano__curve-right {
-  position: absolute;
-  top: 0; right: 0; bottom: 0;
-  width: 22%;
-  background: linear-gradient(to left, rgba(0,0,0,0.28) 0%, transparent 100%);
-  pointer-events: none;
-}
-
-/* Bottom gradient on centre panel for text legibility */
-.pano__img-gradient {
+/* Vignette — inner edge darkening that sells the curve */
+.pano-card__vignette {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 45%, rgba(0,0,0,0.72) 100%);
+  background:
+    linear-gradient(to right,  rgba(0,0,0,0.30) 0%,  transparent 25%,  transparent 75%, rgba(0,0,0,0.30) 100%),
+    linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, transparent 30%);
   pointer-events: none;
 }
 
-/* ── Centre label ── */
-.pano__label {
+/* Bottom gradient — active card only, for text legibility */
+.pano-card__bottom-grad {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 42%, rgba(0,0,0,0.78) 100%);
+  pointer-events: none;
+}
+
+/* Text overlay — active card only */
+.pano-card__text {
   position: absolute;
   bottom: 1.4rem;
   left: 1.25rem;
   right: 1.25rem;
-  z-index: 2;
+  z-index: 3;
   pointer-events: none;
 }
 
-.pano__cat {
+.pano-card__cat {
   display: block;
   font-size: var(--text-xs);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: rgba(255,255,255,0.65);
-  margin-bottom: 0.3rem;
+  letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 0.35rem;
 }
 
-.pano__title {
+.pano-card__title {
   font-family: var(--font-heading);
-  font-size: var(--text-xl);
+  font-size: clamp(1.1rem, 2vw, var(--text-xl));
   color: #fff;
   line-height: 1.1;
   letter-spacing: -0.02em;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.55rem;
 }
 
-.pano__hint {
+.pano-card__hint {
   font-size: var(--text-xs);
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.45);
   font-style: italic;
 }
 
-/* ── Dots ── */
-.pano__dots {
+/* ── Arrows ── */
+.pano-arrow {
   position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-glass);
+  backdrop-filter: var(--blur-md);
+  color: var(--color-text-primary);
   display: flex;
-  gap: 0.5rem;
   align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-base);
 }
 
-.pano__dot {
+.pano-arrow:hover {
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+  color: var(--color-canvas);
+  box-shadow: var(--shadow-brand);
+}
+
+.pano-arrow--l { left: 1.5rem; }
+.pano-arrow--r { right: 1.5rem; }
+
+/* ── Dots ── */
+.pano-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.pano-dot {
   width: 6px; height: 6px;
   border-radius: 50%;
   border: none;
@@ -169,14 +197,14 @@
   transition: all var(--transition-base);
 }
 
-.pano__dot--active {
-  width: 22px;
+.pano-dot--on {
+  width: 24px;
   border-radius: var(--radius-full);
   background: var(--color-brand);
 }
 
 /* ═══════════════════════════════════════════
-   PROJECT MODAL
+   MODAL
 ═══════════════════════════════════════════ */
 .pm-overlay {
   position: fixed;
@@ -186,7 +214,7 @@
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
-  background: rgba(0,0,0,0.75);
+  background: rgba(0,0,0,0.76);
   backdrop-filter: var(--blur-xl);
   -webkit-backdrop-filter: var(--blur-xl);
 }
@@ -223,7 +251,7 @@
 .pm-hero__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.75) 100%);
+  background: linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.78) 100%);
 }
 
 .pm-close {
@@ -242,26 +270,21 @@
   cursor: pointer;
   transition: all var(--transition-fast);
 }
+.pm-close:hover { background: rgba(255,255,255,0.15); }
 
-.pm-close:hover {
-  background: rgba(255,255,255,0.15);
-  border-color: rgba(255,255,255,0.5);
-}
-
-.pm-hero__title-wrap {
+.pm-hero__meta {
   position: absolute;
-  bottom: 1.25rem;
-  left: 1.5rem; right: 1.5rem;
+  bottom: 1.25rem; left: 1.5rem; right: 1.5rem;
   z-index: 1;
 }
 
-.pm-category {
+.pm-cat {
   display: block;
   font-size: var(--text-xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255,255,255,0.65);
   margin-bottom: 0.3rem;
 }
 
@@ -326,14 +349,13 @@
   color: var(--color-text-secondary);
   line-height: 1.5;
 }
-
 .pm-feature svg { flex-shrink: 0; margin-top: 2px; color: var(--color-brand); }
 
 .pm-actions {
   display: flex;
   gap: 0.6rem;
   flex-wrap: wrap;
-  padding-top: 0.25rem;
+  padding-top: 0.5rem;
   border-top: 1px solid var(--color-border);
 }
 
@@ -357,20 +379,14 @@
   color: var(--color-canvas);
   box-shadow: var(--shadow-brand);
 }
-
-.pm-btn--primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.pm-btn--primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
 .pm-btn--ghost {
   background: var(--color-overlay);
   color: var(--color-text-secondary);
   border: 1px solid var(--color-border);
 }
-
-.pm-btn--ghost:hover {
-  color: var(--color-brand);
-  border-color: var(--color-brand-border);
-  background: var(--color-brand-muted);
-}
+.pm-btn--ghost:hover { color: var(--color-brand); border-color: var(--color-brand-border); background: var(--color-brand-muted); }
 
 .pm-upcoming {
   display: inline-flex;
@@ -389,18 +405,16 @@
    RESPONSIVE
 ═══════════════════════════════════════════ */
 @media (max-width: 900px) {
-  .pano__stage { height: 300px; }
-  .pano__card  { width: 38%; }
-  .pano__card--centre { width: 46%; }
-  .pano__title { font-size: var(--text-lg); }
+  .pano-stage { height: 340px; }
+  .pano-arrow { width: 40px; height: 40px; }
+  .pano-arrow--l { left: 0.75rem; }
+  .pano-arrow--r { right: 0.75rem; }
 }
 
 @media (max-width: 600px) {
-  .pano__stage { height: 260px; }
-  .pano__card  { width: 44%; }
-  .pano__card--centre { width: 54%; }
-  .pano__title { font-size: var(--text-base); }
-  .pm-hero     { height: 200px; }
+  .pano-stage { height: 280px; perspective: 700px; }
+  .pano-arrow { display: none; }
+  .pm-hero { height: 200px; }
   .pm-features { grid-template-columns: 1fr; }
-  .pm-title    { font-size: var(--text-xl); }
+  .pm-title { font-size: var(--text-xl); }
 }
