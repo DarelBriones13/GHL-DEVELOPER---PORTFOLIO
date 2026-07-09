@@ -130,7 +130,7 @@ const HoloCard = () => {
           className="hc-holo"
           style={{
             backgroundPosition: `${mousePos.x * 100}% ${mousePos.y * 100}%`,
-            opacity: hovered ? 0.55 : 0.18,
+            opacity: hovered ? 0.7 : 0.15,
           }}
         />
 
@@ -138,9 +138,9 @@ const HoloCard = () => {
         <div
           className="hc-specular"
           style={{
-            background: `radial-gradient(circle 180px at ${mousePos.x * 100}% ${mousePos.y * 100}%,
-              rgba(255,255,255,0.22) 0%,
-              rgba(255,255,255,0.06) 40%,
+            background: `radial-gradient(circle 160px at ${mousePos.x * 100}% ${mousePos.y * 100}%,
+              rgba(255,255,255,0.35) 0%,
+              rgba(255,255,255,0.08) 45%,
               transparent 70%)`,
             opacity: hovered ? 1 : 0,
           }}
@@ -175,8 +175,16 @@ const HoloCard = () => {
         {/* ── Photo + Info ── */}
         <div className="hc-main">
           <div className="hc-photo-wrap">
-            <img src={PROFILE_PIC} alt="Darel S. Briones" className="hc-photo"
-              onError={e => { e.currentTarget.style.display='none'; e.currentTarget.nextSibling.style.display='flex'; }} />
+            <img
+              src={PROFILE_PIC}
+              alt="Darel S. Briones"
+              className="hc-photo"
+              onError={e => {
+                e.currentTarget.style.display = 'none';
+                const fb = e.currentTarget.parentNode.querySelector('.hc-photo-fallback');
+                if (fb) fb.style.display = 'flex';
+              }}
+            />
             <div className="hc-photo-fallback">DB</div>
             <div className="hc-photo-ring" />
           </div>

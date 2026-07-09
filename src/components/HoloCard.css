@@ -1,29 +1,42 @@
 /* ═══════════════════════════════════════════════
    HOLOGRAPHIC ACCESS CARD
-   Cyberpunk palette: deep navy + neon cyan/magenta/green
+   Palette: matches site's black/white/grey system
+   with subtle iridescent sheen on hover
 ═══════════════════════════════════════════════ */
 
-/* Cyberpunk tokens — scoped to the card */
 .hc-scene {
-  --hc-bg:          #050d1a;
-  --hc-surface:     #0a1628;
-  --hc-border:      rgba(0, 255, 200, 0.25);
-  --hc-cyan:        #00ffe0;
-  --hc-magenta:     #ff00aa;
-  --hc-green:       #00ff88;
-  --hc-gold:        #ffd700;
-  --hc-text:        #c8e6ff;
-  --hc-muted:       rgba(150, 200, 255, 0.45);
-  --hc-stripe-col:  #111c2e;
+  /* Light mode tokens */
+  --hc-bg:       #ffffff;
+  --hc-surface:  #f5f5f5;
+  --hc-border:   #e5e5e5;
+  --hc-border-h: #a3a3a3;
+  --hc-text:     #0a0a0a;
+  --hc-sub:      #525252;
+  --hc-muted:    #a3a3a3;
+  --hc-accent:   #111111;
+  --hc-green:    #22c55e;
+  --hc-chip-bg:  linear-gradient(135deg, #c8a84b 0%, #f0d070 40%, #a07830 100%);
 
   perspective: 900px;
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
+  cursor: default;
 }
 
-/* ── Card wrapper ── */
+/* Dark mode overrides */
+[data-theme="dark"] .hc-scene {
+  --hc-bg:       #141414;
+  --hc-surface:  #1c1c1c;
+  --hc-border:   rgba(255,255,255,0.08);
+  --hc-border-h: rgba(255,255,255,0.22);
+  --hc-text:     #f5f5f5;
+  --hc-sub:      #a3a3a3;
+  --hc-muted:    #525252;
+  --hc-accent:   #e5e5e5;
+}
+
+/* ── Card ── */
 .hc-card {
   position: relative;
   width: 300px;
@@ -32,54 +45,62 @@
   border: 1px solid var(--hc-border);
   overflow: hidden;
   box-shadow:
-    0 0 0 1px rgba(0,255,200,0.08),
-    0 20px 60px rgba(0,0,0,0.7),
-    0 0 40px rgba(0,255,200,0.08),
-    inset 0 1px 0 rgba(255,255,255,0.06);
+    0 2px 8px rgba(0,0,0,0.06),
+    0 20px 60px rgba(0,0,0,0.10),
+    inset 0 1px 0 rgba(255,255,255,0.8);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   transform-style: preserve-3d;
 }
 
-.hc-card--hovered {
-  border-color: rgba(0,255,200,0.5);
+[data-theme="dark"] .hc-card {
   box-shadow:
-    0 0 0 1px rgba(0,255,200,0.2),
-    0 30px 80px rgba(0,0,0,0.8),
-    0 0 60px rgba(0,255,200,0.15),
-    0 0 100px rgba(255,0,170,0.08),
-    inset 0 1px 0 rgba(255,255,255,0.08);
+    0 2px 8px rgba(0,0,0,0.5),
+    0 20px 60px rgba(0,0,0,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
-/* ── Holographic rainbow layer ── */
+.hc-card--hovered {
+  border-color: var(--hc-border-h);
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.10),
+    0 30px 80px rgba(0,0,0,0.14),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+[data-theme="dark"] .hc-card--hovered {
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.6),
+    0 30px 80px rgba(0,0,0,0.8),
+    inset 0 1px 0 rgba(255,255,255,0.07);
+}
+
+/* ── Holographic rainbow shine — only on hover ── */
 .hc-holo {
   position: absolute;
   inset: 0;
   border-radius: inherit;
   background:
     repeating-linear-gradient(
-      110deg,
+      105deg,
       transparent 0%,
-      rgba(0,255,200,0.07) 5%,
-      rgba(255,0,170,0.07) 10%,
-      rgba(0,200,255,0.07) 15%,
-      rgba(255,220,0,0.05) 20%,
-      transparent 25%
+      rgba(0,0,0,0.04)  4%,
+      rgba(0,0,0,0.02)  8%,
+      transparent      12%
     ),
     repeating-linear-gradient(
-      -70deg,
+      -75deg,
       transparent 0%,
-      rgba(0,255,200,0.05) 6%,
-      rgba(255,0,170,0.05) 12%,
-      transparent 18%
+      rgba(255,255,255,0.06) 5%,
+      transparent 10%
     );
-  background-size: 300% 300%;
-  mix-blend-mode: screen;
+  background-size: 200% 200%;
+  mix-blend-mode: overlay;
   pointer-events: none;
   z-index: 1;
-  transition: opacity 0.3s ease, background-position 0.15s ease;
+  transition: opacity 0.3s ease;
 }
 
-/* ── Specular light follow ── */
+/* ── Specular light highlight follows cursor ── */
 .hc-specular {
   position: absolute;
   inset: 0;
@@ -89,49 +110,46 @@
   transition: opacity 0.2s ease;
 }
 
-/* ── Scanlines ── */
+/* ── Subtle texture ── */
 .hc-scanlines {
   position: absolute;
   inset: 0;
   background: repeating-linear-gradient(
     to bottom,
     transparent 0px,
-    transparent 3px,
-    rgba(0,255,200,0.025) 3px,
-    rgba(0,255,200,0.025) 4px
+    transparent 5px,
+    rgba(0,0,0,0.012) 5px,
+    rgba(0,0,0,0.012) 6px
   );
   pointer-events: none;
   z-index: 3;
   border-radius: inherit;
 }
 
-/* ── All content sits above overlays ── */
+/* All content above overlays */
 .hc-topbar,
 .hc-header-strip,
 .hc-main,
 .hc-divider,
 .hc-bottom,
 .hc-stripe,
-.hc-footer-text {
-  position: relative;
-  z-index: 4;
-}
+.hc-footer-text { position: relative; z-index: 4; }
 
 /* ── Top bar ── */
 .hc-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px 6px;
+  padding: 11px 15px 6px;
 }
 
 .hc-corp {
   font-family: 'SK Modernist', monospace;
   font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.25em;
-  color: var(--hc-cyan);
-  text-shadow: 0 0 8px var(--hc-cyan);
+  letter-spacing: 0.22em;
+  color: var(--hc-text);
+  text-transform: uppercase;
 }
 
 .hc-led-wrap {
@@ -144,21 +162,21 @@
   font-family: monospace;
   font-size: 8px;
   font-weight: 700;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.14em;
   color: var(--hc-muted);
 }
 
 .hc-led {
   width: 7px; height: 7px;
   border-radius: 50%;
-  background: #1a2a1a;
-  border: 1px solid rgba(0,255,136,0.3);
-  transition: background 0.1s, box-shadow 0.1s;
+  background: #d4d4d4;
+  border: 1px solid var(--hc-border);
+  transition: background 0.15s, box-shadow 0.15s;
 }
 
 .hc-led--on {
   background: var(--hc-green);
-  box-shadow: 0 0 6px var(--hc-green), 0 0 14px var(--hc-green);
+  box-shadow: 0 0 5px var(--hc-green), 0 0 12px rgba(34,197,94,0.4);
 }
 
 /* ── Header strip ── */
@@ -166,20 +184,20 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 6px 14px 10px;
-  border-bottom: 1px solid rgba(0,255,200,0.1);
+  padding: 5px 15px 10px;
+  border-bottom: 1px solid var(--hc-border);
 }
 
 /* EMV chip */
 .hc-chip {
   width: 30px; height: 22px;
-  background: linear-gradient(135deg, #c8a84b 0%, #f0d070 40%, #a07830 100%);
+  background: var(--hc-chip-bg);
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.5);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
 }
 
 .hc-chip-lines {
@@ -191,7 +209,7 @@
 
 .hc-chip-line {
   height: 1.5px;
-  background: rgba(80,50,0,0.5);
+  background: rgba(80,50,0,0.45);
   border-radius: 1px;
 }
 
@@ -199,9 +217,8 @@
   font-family: monospace;
   font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.22em;
-  color: var(--hc-cyan);
-  text-shadow: 0 0 6px var(--hc-cyan);
+  letter-spacing: 0.2em;
+  color: var(--hc-text);
   line-height: 1;
   margin-bottom: 2px;
 }
@@ -209,114 +226,126 @@
 .hc-unit {
   font-family: monospace;
   font-size: 7px;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   color: var(--hc-muted);
 }
 
+/* NFC icon */
 .hc-nfc-icon {
-  width: 22px; height: 22px;
+  width: 20px; height: 20px;
   margin-left: auto;
-  color: rgba(0,255,200,0.5);
+  color: var(--hc-muted);
   flex-shrink: 0;
-  animation: nfc-pulse 2.5s ease-in-out infinite;
+  animation: nfc-pulse 3s ease-in-out infinite;
 }
 
 @keyframes nfc-pulse {
-  0%, 100% { color: rgba(0,255,200,0.35); filter: drop-shadow(0 0 0px transparent); }
-  50%       { color: rgba(0,255,200,0.85); filter: drop-shadow(0 0 6px rgba(0,255,200,0.6)); }
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 1; }
 }
 
 /* ── Main: photo + info ── */
 .hc-main {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
+  gap: 13px;
+  padding: 13px 15px;
 }
 
 .hc-photo-wrap {
   position: relative;
   flex-shrink: 0;
-  width: 64px; height: 64px;
+  width: 68px; height: 68px;
 }
 
 .hc-photo {
-  width: 64px; height: 64px;
+  width: 68px; height: 68px;
   border-radius: 10px;
   object-fit: cover;
   object-position: center top;
   display: block;
-  border: 1.5px solid rgba(0,255,200,0.3);
-  box-shadow: 0 0 12px rgba(0,255,200,0.2);
+  border: 1.5px solid var(--hc-border);
+  position: relative;
+  z-index: 1;
 }
 
 .hc-photo-fallback {
   display: none;
-  width: 64px; height: 64px;
+  width: 68px; height: 68px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #0a1628, #1a2a40);
-  border: 1.5px solid rgba(0,255,200,0.3);
+  background: var(--hc-surface);
+  border: 1.5px solid var(--hc-border);
   align-items: center;
   justify-content: center;
   font-family: monospace;
-  font-size: 1.3rem;
-  color: var(--hc-cyan);
+  font-size: 1.4rem;
+  color: var(--hc-sub);
   font-weight: 700;
+  position: relative;
+  z-index: 1;
 }
 
-/* Subtle corner notch animation */
+/* Animated rainbow conic border ring — PRESERVED */
 .hc-photo-ring {
   position: absolute;
   inset: -3px;
   border-radius: 13px;
-  border: 1px solid transparent;
-  background:
-    linear-gradient(var(--hc-bg), var(--hc-bg)) padding-box,
-    conic-gradient(from 0deg, var(--hc-cyan), var(--hc-magenta), var(--hc-cyan)) border-box;
-  animation: ring-spin 4s linear infinite;
+  padding: 2px;
+  background: conic-gradient(
+    from 0deg,
+    #00ffe0,
+    #ff00aa,
+    #ffd700,
+    #00ff88,
+    #00bfff,
+    #ff00aa,
+    #00ffe0
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  animation: ring-spin 3s linear infinite;
   pointer-events: none;
+  filter: blur(0.5px);
 }
 
 @keyframes ring-spin {
-  to { filter: hue-rotate(360deg); }
+  to { transform: rotate(360deg); }
 }
 
-.hc-info {
-  flex: 1;
-  min-width: 0;
-}
+.hc-info { flex: 1; min-width: 0; }
 
 .hc-name {
   font-family: monospace;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #fff;
+  letter-spacing: 0.1em;
+  color: var(--hc-text);
   margin-bottom: 3px;
-  text-shadow: 0 0 10px rgba(0,255,200,0.4);
 }
 
 .hc-role {
   font-family: monospace;
   font-size: 9px;
-  letter-spacing: 0.08em;
-  color: var(--hc-cyan);
+  letter-spacing: 0.06em;
+  color: var(--hc-sub);
   margin-bottom: 5px;
-  text-shadow: 0 0 6px var(--hc-cyan);
 }
 
 .hc-id {
   font-family: monospace;
-  font-size: 8px;
-  letter-spacing: 0.1em;
+  font-size: 7.5px;
+  letter-spacing: 0.09em;
   color: var(--hc-muted);
 }
 
 /* ── Divider ── */
 .hc-divider {
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(0,255,200,0.3), transparent);
-  margin: 0 14px;
+  background: var(--hc-border);
+  margin: 0 15px;
 }
 
 /* ── Bottom: QR + meta ── */
@@ -324,7 +353,7 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 12px 14px;
+  padding: 12px 15px;
 }
 
 .hc-qr-wrap {
@@ -339,28 +368,27 @@
 
 .hc-qr {
   width: 58px; height: 58px;
-  color: var(--hc-cyan);
-  background: rgba(0,255,200,0.04);
-  border: 1px solid rgba(0,255,200,0.2);
+  color: var(--hc-text);
+  background: var(--hc-surface);
+  border: 1px solid var(--hc-border);
   border-radius: 6px;
   padding: 4px;
   transition: all 0.2s ease;
 }
 
 .hc-qr-wrap:hover .hc-qr {
-  color: var(--hc-green);
-  border-color: rgba(0,255,136,0.5);
-  box-shadow: 0 0 12px rgba(0,255,136,0.3);
+  border-color: var(--hc-border-h);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .hc-qr-label {
   font-family: monospace;
   font-size: 7px;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   color: var(--hc-muted);
 }
 
-/* Meta grid */
+/* Meta */
 .hc-meta {
   flex: 1;
   display: flex;
@@ -377,7 +405,7 @@
 .hc-meta-key {
   font-family: monospace;
   font-size: 7px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.13em;
   color: var(--hc-muted);
 }
 
@@ -385,39 +413,40 @@
   font-family: monospace;
   font-size: 8px;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--hc-text);
+  letter-spacing: 0.07em;
+  color: var(--hc-sub);
 }
 
 .hc-meta-val--green {
   color: var(--hc-green);
-  text-shadow: 0 0 6px var(--hc-green);
-  animation: status-blink 2s ease-in-out infinite;
+  animation: status-blink 2.5s ease-in-out infinite;
 }
 
 @keyframes status-blink {
   0%, 100% { opacity: 1; }
-  50%       { opacity: 0.7; }
+  50%       { opacity: 0.65; }
 }
 
 /* ── Magnetic stripe ── */
 .hc-stripe {
-  height: 22px;
-  background: linear-gradient(to bottom,
-    #0a0a0a 0%, #1a1a1a 30%, #0a0a0a 60%, #111 100%);
+  height: 20px;
+  background: linear-gradient(to bottom, #0a0a0a 0%, #1c1c1c 50%, #0a0a0a 100%);
   margin-top: 4px;
   position: relative;
   overflow: hidden;
 }
 
+[data-theme="dark"] .hc-stripe {
+  background: linear-gradient(to bottom, #000 0%, #111 50%, #000 100%);
+}
+
 .hc-stripe::after {
   content: '';
-  position: absolute;
-  inset: 0;
+  position: absolute; inset: 0;
   background: repeating-linear-gradient(
     90deg,
-    transparent 0px, transparent 3px,
-    rgba(255,255,255,0.03) 3px, rgba(255,255,255,0.03) 4px
+    transparent 0px, transparent 4px,
+    rgba(255,255,255,0.03) 4px, rgba(255,255,255,0.03) 5px
   );
 }
 
@@ -425,39 +454,23 @@
 .hc-footer-text {
   font-family: monospace;
   font-size: 6px;
-  letter-spacing: 0.16em;
-  color: rgba(0,255,200,0.2);
+  letter-spacing: 0.14em;
+  color: var(--hc-muted);
   text-align: center;
-  padding: 5px 14px 10px;
+  padding: 5px 15px 10px;
+  opacity: 0.6;
 }
 
-/* ── Drop shadow card ── */
+/* ── Drop shadow plane ── */
 .hc-shadow {
   position: absolute;
   inset: 0;
   border-radius: 18px;
-  background: transparent;
-  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.15);
   pointer-events: none;
   z-index: -1;
 }
 
-/* ── Ambient outer glow animation ── */
-.hc-card--hovered::after {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: 19px;
-  background: transparent;
-  border: 1px solid;
-  border-image: linear-gradient(135deg, var(--hc-cyan), var(--hc-magenta), var(--hc-cyan)) 1;
-  animation: border-glow 2s linear infinite;
-  pointer-events: none;
-  z-index: 5;
-}
-
-@keyframes border-glow {
-  0%   { filter: hue-rotate(0deg) brightness(1); }
-  50%  { filter: hue-rotate(60deg) brightness(1.4); }
-  100% { filter: hue-rotate(0deg) brightness(1); }
+[data-theme="dark"] .hc-shadow {
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
 }
