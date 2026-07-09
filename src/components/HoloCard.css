@@ -285,7 +285,7 @@
   z-index: 1;
 }
 
-/* Animated rainbow conic border ring — PRESERVED */
+/* Static rainbow conic border ring — no rotation */
 .hc-photo-ring {
   position: absolute;
   inset: -3px;
@@ -306,13 +306,8 @@
     linear-gradient(#fff 0 0);
   -webkit-mask-composite: destination-out;
   mask-composite: exclude;
-  animation: ring-spin 3s linear infinite;
   pointer-events: none;
   filter: blur(0.5px);
-}
-
-@keyframes ring-spin {
-  to { transform: rotate(360deg); }
 }
 
 .hc-info { flex: 1; min-width: 0; }
