@@ -393,9 +393,4 @@
 
 @media (max-width: 640px) {
   .hero { padding: 4rem 0 2.5rem; }
-  .hero__card-wrapper { width: 280px; height: 320px; }
-  .hero__main-card    { width: 210px; }
-  .hero__float-card--1 { right: -2px; }
-  .hero__float-card--2 { right: -2px; }
-  .hero__float-card--3 { left: -2px; }
 }

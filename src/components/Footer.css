@@ -209,8 +209,13 @@
   .footer__container { padding: 0 1.5rem; }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
   .footer__top { grid-template-columns: 1fr; gap: 1.5rem; }
+  .footer__container { padding: 0 1rem; }
+  .footer { padding: 2.5rem 0 0; }
+}
+
+@media (max-width: 480px) {
   .footer__bottom { flex-direction: column; gap: 0.75rem; text-align: center; }
   .footer__copy { justify-content: center; }
 }

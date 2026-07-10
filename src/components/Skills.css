@@ -163,3 +163,10 @@
 @media (max-width: 1024px) {
   .skills-section__grid { grid-template-columns: 1fr; }
 }
+
+@media (max-width: 640px) {
+  .skills-section { padding: 3.5rem 0; }
+  .skills-section__bars { padding: 1.1rem; }
+  .skills-section__tools-grid { gap: 0.45rem; }
+  .tool-chip { padding: 0.45rem 0.85rem; }
+}

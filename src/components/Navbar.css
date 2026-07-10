@@ -191,7 +191,7 @@
 /* Mobile menu */
 .navbar__mobile {
   position: fixed;
-  top: 60px;
+  top: 57px;
   left: 0; right: 0;
   z-index: 999;
   background: var(--color-glass);
@@ -199,7 +199,7 @@
   -webkit-backdrop-filter: var(--blur-xl);
   border-bottom: 1px solid var(--color-border);
   box-shadow: var(--shadow-lg);
-  padding: 0.75rem 1.5rem 1rem;
+  padding: 0.75rem 1.25rem 1rem;
 }
 
 .navbar__mobile-links {

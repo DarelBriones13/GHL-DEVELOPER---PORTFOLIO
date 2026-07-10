@@ -469,3 +469,23 @@
 [data-theme="dark"] .hc-shadow {
   box-shadow: 0 40px 80px rgba(0,0,0,0.6);
 }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .hc-scene { width: 100%; max-width: 320px; }
+  .hc-card  { width: 100%; }
+}
+
+@media (max-width: 640px) {
+  .hc-scene { max-width: 100%; padding: 0 0.5rem; }
+  .hc-card  { width: 100%; border-radius: 14px; }
+  .hc-name  { font-size: 10.5px; }
+}
+
+@media (max-width: 380px) {
+  .hc-photo-wrap { width: 56px; height: 56px; }
+  .hc-photo,
+  .hc-photo-fallback { width: 56px; height: 56px; }
+  .hc-bottom { flex-direction: column; align-items: center; }
+  .hc-meta   { width: 100%; }
+}

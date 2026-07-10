@@ -388,8 +388,18 @@
 }
 
 @media (max-width: 640px) {
+  .c3-root  { padding: 0 36px; overflow: hidden; }
   .c3-stage { height: 260px; perspective: 700px; }
-  .c3-root  { padding: 0 36px; }
   .pm-hero  { height: 200px; }
   .pm-features { grid-template-columns: 1fr; }
+  .pm-body  { padding: 1.1rem 1.1rem 1.25rem; }
+  .pm-title { font-size: 1.2rem; }
+  .lb-overlay { padding: 1rem; }
+}
+
+@media (max-width: 400px) {
+  .c3-root  { padding: 0 28px; }
+  .c3-stage { height: 230px; }
+  .c3-arrow { width: 32px; height: 32px; }
+  .projects { padding: 3rem 0; }
 }

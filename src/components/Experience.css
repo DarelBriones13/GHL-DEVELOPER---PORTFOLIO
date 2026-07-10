@@ -223,3 +223,10 @@
 @media (max-width: 1024px) {
   .experience__grid { grid-template-columns: 1fr; gap: 2rem; }
 }
+
+@media (max-width: 640px) {
+  .experience { padding: 3.5rem 0; }
+  .experience__header { margin-bottom: 1.5rem; }
+  .exp-card { padding: 1rem; }
+  .edu-card { padding: 1rem; }
+}

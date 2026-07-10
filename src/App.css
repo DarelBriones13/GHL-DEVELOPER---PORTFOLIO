@@ -28,8 +28,8 @@
 }
 .app__sidebar::-webkit-scrollbar { display: none; }
 
-/* Main — never clip */
-.app__main { min-width: 0; }
+/* ── Overflow guard — prevents horizontal scroll from carousel bleed ── */
+.app__main { min-width: 0; overflow-x: hidden; }
 
 /* Subtle section separation */
 .app__main > section {
@@ -55,7 +55,7 @@
 @media (max-width: 1024px) {
   .app__layout {
     grid-template-columns: 1fr;
-    padding: 5rem 1.5rem 0;
+    padding: 5rem 1.25rem 0;
     gap: 1.5rem;
   }
   .app__sidebar {
@@ -67,6 +67,11 @@
 }
 
 @media (max-width: 640px) {
-  .app__layout { padding: 4.5rem 1rem 0; gap: 1rem; }
-  .section { padding: 3.5rem 0; }
+  .app__layout { padding: 4.5rem 0.875rem 0; gap: 1rem; }
+  .section { padding: 3rem 0; }
+}
+
+@media (max-width: 380px) {
+  .app__layout { padding: 4.5rem 0.75rem 0; }
+  .section { padding: 2.5rem 0; }
 }

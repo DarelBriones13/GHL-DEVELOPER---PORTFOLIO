@@ -181,3 +181,10 @@
 @media (max-width: 1024px) {
   .certs__layout { grid-template-columns: 1fr; gap: 2.5rem; }
 }
+
+@media (max-width: 640px) {
+  .certs { padding: 3.5rem 0; }
+  .why-list { padding: 1.1rem; }
+  .cert-item__card { padding: 0.75rem 0.9rem; }
+  .cert-item__title { font-size: var(--text-sm); }
+}

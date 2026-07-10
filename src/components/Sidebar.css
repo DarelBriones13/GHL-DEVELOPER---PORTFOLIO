@@ -288,6 +288,8 @@
   .sidebar__profile { grid-column: 1 / -1; }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
   .sidebar { grid-template-columns: 1fr; }
+  .sidebar__profile { padding: 1.25rem 1rem; }
+  .sidebar__section { padding: 0.9rem 1rem; }
 }
