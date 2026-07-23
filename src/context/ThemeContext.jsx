@@ -54,18 +54,17 @@ export const ThemeProvider = ({ children }) => {
     setFlipping(true);
     document.documentElement.classList.add('theme-flipping');
 
-    /* Switch the actual theme at the midpoint of the flip (350ms)
-       so it's invisible while the page is edge-on */
+    /* Switch theme at the edge-on midpoint — page is invisible so swap is seamless */
     timerRef.current = setTimeout(() => {
       setTheme(incoming);
-    }, 350);
+    }, 360);
 
-    /* End the flip animation */
+    /* Remove overlay after full animation completes */
     const endTimer = setTimeout(() => {
       setFlipping(false);
       setNext(null);
       document.documentElement.classList.remove('theme-flipping');
-    }, 750);
+    }, 780);
 
     return () => {
       clearTimeout(timerRef.current);
