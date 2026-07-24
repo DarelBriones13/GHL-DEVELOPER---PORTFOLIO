@@ -9,7 +9,7 @@ const FlipOverlay = ({ flipping, nextTheme }) => {
 
   /* The overlay is the colour of the INCOMING theme so when it lands flat
      you see the new theme's background */
-  const incomingBg = nextTheme === 'dark' ? '#0a0a0a' : '#fafafa';
+  const incomingBg = nextTheme === 'dark' ? '#0f0e17' : '#fafaf9';
   const incomingAccent = nextTheme === 'dark'
     ? 'rgba(255,255,255,0.04)'
     : 'rgba(0,0,0,0.04)';
